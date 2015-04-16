@@ -4,7 +4,7 @@
 //
 //  Created by 张 玺 on 12-8-20.
 //  Copyright (c) 2012年 me.zhangxi. All rights reserved.
-//
+//  hennychen 修改 
 
 #import <Cocoa/Cocoa.h>
 #import "JSONKit.h"

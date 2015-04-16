@@ -65,15 +65,15 @@
                 if([self isDataArray:[json objectForKey:key]])
                 {
                     [proterty appendFormat:@"@property (nonatomic,strong) NSMutableArray *%@%@;\n",preName.stringValue,key];
-                    [import appendFormat:@"#import \"%@Entity.h\"",[self uppercaseFirstChar:key]];
-                    [self generateClass:[NSString stringWithFormat:@"%@Entity",[self uppercaseFirstChar:key]] forDic:[[json objectForKey:key]objectAtIndex:0]];
+                    [import appendFormat:@"#import \"%@_%@.h\"",jsonName.stringValue,[self uppercaseFirstChar:key]];
+                    [self generateClass:[NSString stringWithFormat:@"%@_%@",jsonName.stringValue,[self uppercaseFirstChar:key]] forDic:[[json objectForKey:key]objectAtIndex:0]];
                 }
             }
                 break;
             case kDictionary:
-                [proterty appendFormat:@"@property (nonatomic,strong) %@Entity *%@%@;\n",[self uppercaseFirstChar:key],preName.stringValue,key];
-                [import appendFormat:@"#import \"%@Entity.h\"",[self uppercaseFirstChar:key]];
-                [self generateClass:[NSString stringWithFormat:@"%@Entity",[self uppercaseFirstChar:key]] forDic:[json objectForKey:key]];
+                [proterty appendFormat:@"@property (nonatomic,strong) %@_%@ *%@%@;\n",jsonName.stringValue,[self uppercaseFirstChar:key],preName.stringValue,key];
+                [import appendFormat:@"#import \"%@_%@.h\"",jsonName.stringValue,[self uppercaseFirstChar:key]];
+                [self generateClass:[NSString stringWithFormat:@"%@_%@",jsonName.stringValue,[self uppercaseFirstChar:key]] forDic:[json objectForKey:key]];
                 
                 break;
             case kBool:
@@ -126,8 +126,8 @@
             case kString:
             case kNumber:
                 [config appendFormat:@"self.%@%@  = [json objectForKey:@\"%@\"];\n ",preName.stringValue,key,key];
-                [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"zx_%@\"];\n",preName.stringValue,key,key];
-                [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"zx_%@\"];\n ",preName.stringValue,key,key];
+                [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
+                [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key];
                 break;
             case kArray:
@@ -137,25 +137,25 @@
                     [config appendFormat:@"self.%@%@ = [NSMutableArray array];\n",preName.stringValue,key];
                     [config appendFormat:@"for(NSDictionary *item in [json objectForKey:@\"%@\"])\n",key];
                     [config appendString:@"{\n"];
-                    [config appendFormat:@"[self.%@%@ addObject:[[%@Entity alloc] initWithJson:item]];\n",preName.stringValue,key,[self uppercaseFirstChar:key]];
+                    [config appendFormat:@"[self.%@%@ addObject:[[%@_%@ alloc] initWithJson:item]];\n",preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key]];
                     [config appendString:@"}\n"];
-                    [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"zx_%@\"];\n",preName.stringValue,key,key];
-                    [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"zx_%@\"];\n ",preName.stringValue,key,key];
+                    [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
+                    [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName,key];
                    [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key]; 
                 }
             }
                 break;
             case kDictionary:
-                [config appendFormat:@"self.%@%@  = [[%@Entity alloc] initWithJson:[json objectForKey:@\"%@\"]];\n ",preName.stringValue,key,[self uppercaseFirstChar:key],key];
-                [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"zx_%@\"];\n",preName.stringValue,key,key];
-                [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"zx_%@\"];\n ",preName.stringValue,key,key];
+                [config appendFormat:@"self.%@%@  = [[%@_%@ alloc] initWithJson:[json objectForKey:@\"%@\"]];\n ",preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key],key];
+                [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
+                [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key]; 
                 
                 break;
             case kBool:
                 [config appendFormat:@"self.%@%@ = [[json objectForKey:@\"%@\"]boolValue];\n ",preName.stringValue,key,key];
-                [encode appendFormat:@"[aCoder encodeBool:self.%@%@ forKey:@\"zx_%@\"];\n",preName.stringValue,key,key];
-                [decode appendFormat:@"self.%@%@ = [aDecoder decodeBoolForKey:@\"zx_%@\"];\n",preName.stringValue,key,key];
+                [encode appendFormat:@"[aCoder encodeBool:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
+                [decode appendFormat:@"self.%@%@ = [aDecoder decodeBoolForKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@?@\"yes\":@\"no\"];\n",preName.stringValue,key,preName.stringValue,key];
                 break;
             default:
