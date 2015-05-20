@@ -76,7 +76,7 @@
                 break;
             case kDictionary:
                 [proterty appendFormat:@"@property (nonatomic,strong) %@_%@ *%@%@;\n",jsonName.stringValue,[self uppercaseFirstChar:key],preName.stringValue,key];
-                [import appendFormat:@"#import \"%@_%@.h\"",jsonName.stringValue,[self uppercaseFirstChar:key]];
+                [import appendFormat:@"#import \"%@_%@.h\" \n",jsonName.stringValue,[self uppercaseFirstChar:key]];
                 [self generateClass:[NSString stringWithFormat:@"%@_%@",jsonName.stringValue,[self uppercaseFirstChar:key]] forDic:[json objectForKey:key]];
                 
                 break;
