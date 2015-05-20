@@ -151,7 +151,7 @@
                     [config appendFormat:@"[self.%@%@ addObject:[[%@_%@ alloc] initWithJson:item]];\n",preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key]];
                     [config appendString:@"}\n"];
                     [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
-                    [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName,key];
+                    [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
                    [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key]; 
                 }else{
                     [config appendFormat:@"self.%@%@  = [json objectForKey:@\"%@\"];\n ",preName.stringValue,key,key];
