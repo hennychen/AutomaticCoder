@@ -69,6 +69,8 @@
                     [proterty appendFormat:@"@property (nonatomic,strong) NSMutableArray *%@%@;\n",preName.stringValue,key];
                     [import appendFormat:@"#import \"%@_%@.h\"",jsonName.stringValue,[self uppercaseFirstChar:key]];
                     [self generateClass:[NSString stringWithFormat:@"%@_%@",jsonName.stringValue,[self uppercaseFirstChar:key]] forDic:[[json objectForKey:key]objectAtIndex:0]];
+                }else{
+                    [proterty appendFormat:@"@property (nonatomic,strong) NSMutableArray *%@%@;\n",preName.stringValue,key];
                 }
             }
                 break;
@@ -151,6 +153,11 @@
                     [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
                     [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName,key];
                    [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key]; 
+                }else{
+                    [config appendFormat:@"self.%@%@  = [json objectForKey:@\"%@\"];\n ",preName.stringValue,key,key];
+                    [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
+                    [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
+                    [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key];
                 }
             }
                 break;
