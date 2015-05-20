@@ -162,7 +162,9 @@
             }
                 break;
             case kDictionary:
-                [config appendFormat:@"self.%@%@  = [[%@_%@ alloc] initWithJson:[json objectForKey:@\"%@\"]];\n ",preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key],key];
+                [config appendFormat:@"\n if ([self objectOrNilForKey:@\"%@\" fromDictionary:json]) {\n self.%@%@  = [[%@_%@ alloc] initWithJson:[json objectForKey:@\"%@\"]];\n } \n ",key,preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key],key];
+                
+                [config appendFormat:@"\n"];
                 [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
                 [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key]; 
@@ -175,7 +177,7 @@
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@?@\"yes\":@\"no\"];\n",preName.stringValue,key,preName.stringValue,key];
                 break;
             default:
-                [config appendFormat:@"self.%@%@  = [json objectForKey:@\"%@\"];\n ",preName.stringValue,key,key];
+                [config appendFormat:@"\n self.%@%@  = [json objectForKey:@\"%@\"];\n \n",preName.stringValue,key,key];
                 [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
                 [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
                 [description appendFormat:@"result = [result stringByAppendingFormat:@\"%@%@ : %%@\\n\",self.%@%@];\n",preName.stringValue,key,preName.stringValue,key];
@@ -210,7 +212,7 @@
 
 
 - (IBAction)useTestURL:(id)sender {
-    jsonURL.stringValue = @"http://zxapi.sinaapp.com";
+   
 }
 
 - (IBAction)getJSONWithURL:(id)sender {
