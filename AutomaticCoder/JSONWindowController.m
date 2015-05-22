@@ -148,7 +148,7 @@
                     [config appendFormat:@"self.%@%@ = [NSMutableArray array];\n",preName.stringValue,key];
                     [config appendFormat:@"for(NSDictionary *item in [json objectForKey:@\"%@\"])\n",key];
                     [config appendString:@"{\n"];
-                    [config appendFormat:@"[self.%@%@ addObject:[[%@_%@ alloc] initWithJson:item]];\n",preName.stringValue,key,jsonName.stringValue,[self uppercaseFirstChar:key]];
+                    [config appendFormat:@"[self.%@%@ addObject:item];\n",preName.stringValue,key];
                     [config appendString:@"}\n"];
                     [encode appendFormat:@"[aCoder encodeObject:self.%@%@ forKey:@\"%@_%@\"];\n",preName.stringValue,key,preName.stringValue,key];
                     [decode appendFormat:@"self.%@%@ = [aDecoder decodeObjectForKey:@\"%@_%@\"];\n ",preName.stringValue,key,preName.stringValue,key];
